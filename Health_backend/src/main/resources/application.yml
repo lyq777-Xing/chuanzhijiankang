@@ -1,0 +1,57 @@
+server:
+  port: 8889
+  servlet:
+    context-path: /lyq
+
+spring:
+  jackson:
+    date-format: java.text.SimpleDateFormat
+    default-property-inclusion: non_null
+  application:
+    name: backend
+dubbo:
+  registry:
+    address: zookeeper://192.168.200.3:2181
+    timeout: 25000
+#  protocol:
+#    name: dubbo
+##    default: false
+  scan:
+    base-package: net.zjitc.controller
+  application:
+    id: backend
+
+
+
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: true
+#  type-aliases-package: net.zjitc.entity
+#  mapper-locations: classpath:/net/zjitc/mapper/*.xml
+
+
+
+#  mvc:
+#    view:
+#      suffix: .html
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    default-property-inclusion: non_null
+#  servlet:
+#    multipart:
+#      max-request-size: 50MB
+#      max-file-size: 50MB
+#
+#markerhub:
+#  jwt:
+#    header: Authorization
+#    exprie: 604800
+#    secret: sderftgyhijnhg67y8u4e3ws27896gt5
+
+
+
+
+
+
+
