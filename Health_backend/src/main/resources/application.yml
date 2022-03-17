@@ -20,6 +20,8 @@ dubbo:
     base-package: net.zjitc.controller
   application:
     id: backend
+  consumer:
+    check: false
 
 
 
