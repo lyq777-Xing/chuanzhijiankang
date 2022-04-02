@@ -9,9 +9,17 @@ spring:
     default-property-inclusion: non_null
   application:
     name: backend
+  servlet:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+  redis:
+    host: 192.168.200.3
+    port: 6379
+    timeout: 30000
 dubbo:
   registry:
-    address: zookeeper://192.168.200.3:2181
+    address: zookeeper://192.168.200.3:2182
     timeout: 25000
 #  protocol:
 #    name: dubbo
@@ -23,7 +31,14 @@ dubbo:
   consumer:
     check: false
 
-
+#jedis :
+#  pool :
+#    host : 192.168.200.3
+#    port : 6379
+#    config :
+#      maxTotal: 100
+#      maxIdle: 10
+#      maxWaitMillis : 100000
 
 #mybatis-plus:
 #  configuration:
@@ -33,17 +48,15 @@ dubbo:
 #  mapper-locations: classpath:/net/zjitc/mapper/*.xml
 
 
-
-#  mvc:
-#    view:
-#      suffix: .html
-#  jackson:
-#    date-format: yyyy-MM-dd HH:mm:ss
-#    default-property-inclusion: non_null
 #  servlet:
 #    multipart:
 #      max-request-size: 50MB
 #      max-file-size: 50MB
+      #    view:
+      #      suffix: .html
+      #  jackson:
+      #    date-format: yyyy-MM-dd HH:mm:ss
+      #    default-property-inclusion: non_null
 #
 #markerhub:
 #  jwt:

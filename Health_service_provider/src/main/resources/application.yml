@@ -11,19 +11,55 @@ spring:
     default-property-inclusion: non_null
   application:
     name: provide
+  redis:
+    host: 192.168.200.3
+    port: 6379
+    timeout: 30000
+    jedis:
+      pool:
+        max-active: 8
+  quartz:
+    scheduler:
+      instance-name: MyselfScheduler
+      instance-id: NON_CLUSTERED # 使用集群：AUTO 不使用集群：NON_CLUSTERED
+      skip-update-check: true
+      job-factory:
+        class: org.quartz.simpl.SimpleJobFactory
+    job-store:
+      class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      driver-delegate-class: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+      #配置quartz的数据源 不能不配置会报错
+      datasource: quartzDataSource
+      #      会创建一个表
+      table-prefix: QRTZ_
+      is-clustered: true
+    thread-pool:
+      class: org.quartz.simpl.SimpleThreadPool
+      thread-count: 5
+    datasource:
+      #      quartz的具体数据源信息
+      quartzDataSource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.200.3:3333/health
+        password: 123456
+        username: root
+        maxConnections: 5
+        validationQuery: select 0
+        connection-provider:
+          class: com.lingdu.welend.config.quartz.DruidConnectionProvider
+
 dubbo:
   registry:
-    address: zookeeper://192.168.200.3:2181
+    address: zookeeper://192.168.200.3:2182
     timeout: 6000
   protocol:
     name: dubbo
-    prot: 20880
+    port: 20880
     default: false
   scan:
     base-package: net.zjitc.service
   application:
     id: provide
-
 
 
 #mybatis-plus:

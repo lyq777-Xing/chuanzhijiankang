@@ -1,0 +1,33 @@
+server:
+  port: 8877
+  servlet:
+    context-path: /lyq
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+dubbo:
+  registry:
+    address: zookeeper://192.168.200.3:2182
+    timeout: 6000
+  protocol:
+    name: dubbo
+    port: 20880
+    default: false
+  scan:
+    base-package: net.zjitc.controller
+  application:
+    id: mobile
+spring:
+  redis:
+    host: 192.168.200.3
+    port: 6379
+    timeout: 30000
+    jedis:
+      pool:
+        max-active: 8
+markerhub:
+  jwt:
+    header: Authorization
+    exprie: 604800
+    secret: sderftgyhijnhg67y8u4e3ws27896gt5

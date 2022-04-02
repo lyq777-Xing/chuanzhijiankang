@@ -8,9 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Health_common" />
+        <module name="Health_jobs" />
         <module name="Health_interface" />
         <module name="Health_service_provider" />
         <module name="Health_backend" />
+        <module name="Health_mobile" />
       </profile>
     </annotationProcessing>
   </component>
@@ -19,6 +21,8 @@
       <module name="Health_backend" options="-parameters" />
       <module name="Health_common" options="-parameters" />
       <module name="Health_interface" options="-parameters" />
+      <module name="Health_jobs" options="-parameters" />
+      <module name="Health_mobile" options="-parameters" />
       <module name="Health_service_provider" options="-parameters" />
     </option>
   </component>

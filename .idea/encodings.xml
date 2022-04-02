@@ -4,6 +4,8 @@
     <file url="file://$PROJECT_DIR$/Health_backend/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Health_common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Health_interface/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Health_jobs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Health_mobile/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Health_service_provider/src/main/java" charset="UTF-8" />
   </component>
 </project>
