@@ -1,5 +1,10 @@
 package net.zjitc.controller;
 
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.zjitc.common.MessageConstant;
 import net.zjitc.common.Result;
 import net.zjitc.service.MemberService;
@@ -9,12 +14,14 @@ import org.apache.dubbo.config.annotation.Reference;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -26,6 +33,7 @@ import java.util.*;
 
 @CrossOrigin
 @RestController
+@PreAuthorize("hasAuthority('REPORT_VIEW')")
 @RequestMapping("/report")
 public class ReportController {
     @Reference
@@ -176,6 +184,44 @@ public class ReportController {
             return null;
         }catch (Exception e){
             return new Result(false,MessageConstant.GET_BUSINESS_REPORT_FAIL);
+        }
+    }
+
+    /**
+     * 导出PDF格式
+     * @param request
+     * @param response
+     * @return
+     */
+    @GetMapping("/exportBusinessReport4PDF")
+    public Result exportBusinessReport4PDF(HttpServletRequest request,
+                                           HttpServletResponse response) {
+        try {
+            Map<String, Object> result = memberService.getBusinessReportData();
+//          取出返回结果数据，准备将报表数据写入到PDF文件中
+            List<Map> hotSetmeal = (List<Map>) result.get("hotSetmeal");
+//          动态获取模板文件绝对磁盘路径
+            String jrxmlPath =
+//                    D:\所有Demo\Health_parent\Health_backend\src\main\java\net\zjitc\controller\ReportController.java
+                    request.getSession().getServletContext().getRealPath("template") +
+                            File.separator + "health_business3.jrxml";
+            String jasperPath =
+                    request.getSession().getServletContext().getRealPath("template") +
+                            File.separator + "health_business3.jasper";
+//          编译模板
+            JasperCompileManager.compileReportToFile(jrxmlPath, jasperPath);
+//          填充数据---使用JavaBean数据源方式填充
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperPath,result, new JRBeanCollectionDataSource(hotSetmeal));
+            ServletOutputStream out = response.getOutputStream();
+            response.setContentType("application/pdf");
+            response.setHeader("content-Disposition",
+                    "attachment;filename=report.pdf");
+//          输出文件
+            JasperExportManager.exportReportToPdfStream(jasperPrint,out);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.GET_BUSINESS_REPORT_FAIL);
         }
     }
 }

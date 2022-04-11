@@ -58,11 +58,11 @@ dubbo:
       #    date-format: yyyy-MM-dd HH:mm:ss
       #    default-property-inclusion: non_null
 #
-#markerhub:
-#  jwt:
-#    header: Authorization
-#    exprie: 604800
-#    secret: sderftgyhijnhg67y8u4e3ws27896gt5
+markerhub:
+  jwt:
+    header: Authorization
+    exprie: 604800
+    secret: sderftgyhijnhg67y8u4e3ws27896gt5
 
 
 

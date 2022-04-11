@@ -13,4 +13,12 @@ public class RoleAndUser implements Serializable {
     private Integer user_id;
     @TableField("role_id")
     private Integer role_id;
+
+    public void setUserId(Integer user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setRoleId(Integer role_id) {
+        this.role_id = role_id;
+    }
 }

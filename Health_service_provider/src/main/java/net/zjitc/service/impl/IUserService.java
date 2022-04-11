@@ -6,14 +6,13 @@ import net.zjitc.mapper.*;
 import net.zjitc.service.UserService;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service(interfaceClass = UserService.class)
 @Transactional
+@Service
 public class IUserService implements UserService {
 
     @Autowired
@@ -42,19 +41,6 @@ public class IUserService implements UserService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username",username);
         User user = userMapper.selectOne(wrapper);
-        Integer userId = user.getId();
-//        通过用户id查询其对应的角色id
-        QueryWrapper<RoleAndUser> wrapper1 = new QueryWrapper<>();
-        wrapper1.eq("user_id",userId);
-        List<RoleAndUser> roleAndUsers = roleAndUserMapper.selectList(wrapper1);
-        ArrayList<Role> roles = new ArrayList<>();
-        for (RoleAndUser ur:roleAndUsers) {
-            Integer roleId = ur.getRole_id();
-//            通过role表查询其对应的角色
-            Role role = roleMapper.selectById(roleId);
-            roles.add(role);
-        }
-        user.setRoles(roles);
         return user;
     }
 

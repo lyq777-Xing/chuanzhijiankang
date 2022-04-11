@@ -17,4 +17,5 @@ public interface CheckGroupService extends IService<CheckGroup> {
     CheckGroup findByCode(String code);
     CheckGroup findByName(String name);
     List<CheckGroup> findAll();
+    public void deleteByGroupId(Integer id);
 }

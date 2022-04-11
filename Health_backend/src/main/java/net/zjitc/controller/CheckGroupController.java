@@ -8,6 +8,7 @@ import net.zjitc.entity.CheckItem;
 import net.zjitc.service.CheckGroupService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class CheckGroupController {
      * @param checkGroup
      * @param checkitemIds
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_ADD')")
     @PostMapping("/add/{checkitemIds}")
     public Result add(@RequestBody CheckGroup checkGroup,
                       @PathVariable("checkitemIds") Integer[] checkitemIds){
@@ -62,6 +64,7 @@ public class CheckGroupController {
      * @param query
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_QUERY')")
     @GetMapping("/findpage")
     public Result findPage(@RequestParam(required = true) Integer pagenum,
                            @RequestParam(required = true) Integer pagesize,
@@ -89,6 +92,7 @@ public class CheckGroupController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_QUERY')")
     @GetMapping("/findbyid")
     public Result findById(Integer id){
         try{
@@ -109,6 +113,7 @@ public class CheckGroupController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKGROUP_QUERY')")
     @GetMapping("/findCheckItemIdsByCheckGroupId")
     public Result findCheckItemIdsByCheckGroupId(Integer id){
         try{
@@ -125,13 +130,14 @@ public class CheckGroupController {
     }
 
     /**
-     * 剪辑检查组并且更新检查组与检查项的关系表
+     * 编辑检查组并且更新检查组与检查项的关系表
      * @param checkGroup
      * @param checkitemIds
      * @return
      */
-    @PutMapping("/edit")
-    public Result edit(CheckGroup checkGroup,Integer[] checkitemIds){
+    @PreAuthorize("hasAuthority('CHECKGROUP_EDIT')")
+    @PutMapping("/edit/{checkitemIds}")
+    public Result edit(@RequestBody CheckGroup checkGroup,@PathVariable("checkitemIds") Integer[] checkitemIds){
         try{
             checkGroupService.edit(checkGroup, checkitemIds);
         }catch (Exception e){
@@ -141,6 +147,11 @@ public class CheckGroupController {
         return new Result(true,MessageConstant.EDIT_CHECKGROUP_SUCCESS);
     }
 
+    /**
+     * 查询所有检查组
+     * @return
+     */
+    @PreAuthorize("hasAuthority('CHECKGROUP_QUERY')")
     @GetMapping("/findAll")
     public Result findAll(){
         try{
@@ -154,5 +165,22 @@ public class CheckGroupController {
             e.printStackTrace();
             return new Result(false,MessageConstant.QUERY_CHECKGROUP_FAIL);
         }
+    }
+
+    /**
+     * 删除检查组
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('CHECKGROUP_DELETE')")
+    @DeleteMapping("/delete")
+    public Result deleteById(Integer id){
+        try{
+            checkGroupService.deleteByGroupId(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false,"删除检查组失败");
+        }
+        return new Result(true,"删除检查组成功");
     }
 }

@@ -11,4 +11,12 @@ public class RoleAndPermission {
     private Integer role_id;
     @TableField("permission_id")
     private Integer permission_id;
+
+    public void setRoleId(Integer role_id) {
+        this.role_id = role_id;
+    }
+
+    public void setPermissionId(Integer permission_id) {
+        this.permission_id = permission_id;
+    }
 }

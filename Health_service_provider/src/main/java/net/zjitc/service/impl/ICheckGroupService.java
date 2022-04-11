@@ -88,13 +88,6 @@ public class ICheckGroupService extends ServiceImpl<CheckGroupMapper,CheckGroup>
         QueryWrapper<CheckGoupAndItem> wrapper = new QueryWrapper<>();
         wrapper.eq("checkgroup_id",groupId);
         List<CheckGoupAndItem> checkGoupAndItems = checkGroupAndItemMapper.selectList(wrapper);
-        /*ArrayList<CheckItem> checkItems = new ArrayList<>();
-        for (CheckGoupAndItem c:checkGoupAndItems) {
-            Integer checkitemId = c.getCheckitem_id();
-            CheckItem checkItem = checkItemMapper.selectById(checkitemId);
-            checkItems.add(checkItem);
-        }
-        checkGroup.setCheckItems(checkItems);*/
         ArrayList<Integer> list = new ArrayList<>();
         for (CheckGoupAndItem c:checkGoupAndItems) {
             list.add(c.getCheckitem_id());
@@ -123,6 +116,11 @@ public class ICheckGroupService extends ServiceImpl<CheckGroupMapper,CheckGroup>
         }
     }
 
+    /**
+     * 根据编码查询检查组
+     * @param code
+     * @return
+     */
     @Override
     public CheckGroup findByCode(String code) {
         QueryWrapper<CheckGroup> wrapper = new QueryWrapper<>();
@@ -131,6 +129,11 @@ public class ICheckGroupService extends ServiceImpl<CheckGroupMapper,CheckGroup>
         return checkGroup;
     }
 
+    /**
+     * 根据检查组名称查询
+     * @param name
+     * @return
+     */
     @Override
     public CheckGroup findByName(String name) {
         QueryWrapper<CheckGroup> wrapper = new QueryWrapper<>();
@@ -139,9 +142,27 @@ public class ICheckGroupService extends ServiceImpl<CheckGroupMapper,CheckGroup>
         return checkGroup;
     }
 
+    /**
+     * 查询所有检查组
+     * @return
+     */
     @Override
     public List<CheckGroup> findAll() {
         List<CheckGroup> checkGroups = checkGroupMapper.selectList(null);
         return checkGroups;
+    }
+
+    /**
+     * 根据检查组id删除检查组
+     * @param id
+     */
+    @Override
+    public void deleteByGroupId(Integer id) {
+//        根据groupid删除关联表有关检查项id
+        QueryWrapper<CheckGoupAndItem> wrapper = new QueryWrapper<>();
+        wrapper.eq("checkgroup_id",id);
+        checkGroupAndItemMapper.delete(wrapper);
+//        删除检查组
+        checkGroupMapper.deleteById(id);
     }
 }

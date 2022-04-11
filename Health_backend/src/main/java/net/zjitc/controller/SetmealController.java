@@ -14,6 +14,7 @@ import net.zjitc.utils.RedisUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,6 +66,7 @@ public class SetmealController {
      * @param checkgroupIds
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_ADD')")
     @PostMapping("/add/{checkgroupIds}")
     public Result add(@RequestBody Setmeal setmeal,
                       @PathVariable("checkgroupIds") Integer[] checkgroupIds){
@@ -99,6 +101,7 @@ public class SetmealController {
      * @param query
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_QUERY')")
     @GetMapping("/findpage")
     public Result findPage(@RequestParam(required = true) Integer pagenum,
                            @RequestParam(required = true) Integer pagesize,
@@ -120,6 +123,7 @@ public class SetmealController {
      * 查询所有
      * @return
      */
+    @PreAuthorize("hasAuthority('SETMEAL_QUERY')")
     @GetMapping("/findall")
     public Result findAll(){
         try{

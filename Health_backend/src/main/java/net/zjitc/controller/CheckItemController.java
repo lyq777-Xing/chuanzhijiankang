@@ -6,6 +6,7 @@ import net.zjitc.common.Result;
 import net.zjitc.entity.CheckItem;
 import net.zjitc.service.CheckItemService;
 import org.apache.dubbo.config.annotation.Reference;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CheckItemController {
     /**
      * 新增检查项
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_ADD')")
     @PostMapping("/add")
     public Result add (@RequestBody CheckItem checkItem){
 //        通过try，catch判断是否添加成功
@@ -54,6 +56,7 @@ public class CheckItemController {
     /**
      * 分页查询方法
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_QUERY')")
     @GetMapping("/findpage")
     public Result findpage(@RequestParam(required = true) Integer pagenum,
                            @RequestParam(required = true) Integer pagesize,
@@ -74,6 +77,7 @@ public class CheckItemController {
     /**
      * 删除检查项
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_DELETE')")
     @DeleteMapping("/delete")
     public Result delete(Integer id){
         try{
@@ -91,6 +95,7 @@ public class CheckItemController {
      * @param checkItem
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_EDIT')")
     @PutMapping("/edit")
     public Result edit(@RequestBody CheckItem checkItem){
         try{
@@ -137,6 +142,7 @@ public class CheckItemController {
      * @param id
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_QUERY')")
     @GetMapping("/findById")
     public Result findById(Integer id){
         try{
@@ -152,6 +158,7 @@ public class CheckItemController {
      * 获取所有检查项
      * @return
      */
+    @PreAuthorize("hasAuthority('CHECKITEM_QUERY')")
     @GetMapping("findAll")
     public Result findAll(){
         try{
