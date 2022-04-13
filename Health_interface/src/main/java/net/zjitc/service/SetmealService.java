@@ -15,4 +15,6 @@ public interface SetmealService extends IService<Setmeal> {
     List<Setmeal> findAll();
     Setmeal findById(Integer id);
     List<Map<String,Object>> findSetmealCount();
+    Setmeal updateSetmeal(Setmeal setmeal,Integer[] checkgroupIds);
+    void deleteById(Integer id);
 }

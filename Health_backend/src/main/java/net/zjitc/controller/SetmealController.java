@@ -22,6 +22,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @CrossOrigin
@@ -39,8 +40,9 @@ public class SetmealController {
      * @param imgFile
      * @return
      */
-    @PostMapping("/upload")
+    @RequestMapping("/upload")
     public Result upload(@RequestParam("imgFile")MultipartFile imgFile){
+        System.out.println("d");
 //        获取原始name
         String originalFilename = imgFile.getOriginalFilename();
 //        获取.jpg等后缀
@@ -138,4 +140,75 @@ public class SetmealController {
         }
     }
 
+    /**
+     * 根据套餐信息
+     * @param setmeal
+     * @param checkgroupIds
+     * @return
+     */
+    @PreAuthorize("hasAuthority('SETMEAL_EDIT')")
+    @PutMapping("/update/{checkgroupIds}")
+    public Result update(@RequestBody Setmeal setmeal,@PathVariable("checkgroupIds") Integer[] checkgroupIds){
+        try{
+//            判断用户是否更新了套餐名称
+            Setmeal serviceById = setmealService.findById(setmeal.getId());
+            if(serviceById.getName().equals(setmeal.getName())){
+//                表明未变更套餐名称
+                Setmeal updateSetmeal = setmealService.updateSetmeal(setmeal, checkgroupIds);
+                return new Result(true,"更新套餐成功",updateSetmeal);
+            }else{
+//                表明变更套餐名称
+                Setmeal serviceByName = setmealService.findByName(setmeal.getName());
+                if(serviceByName!=null){
+//                    表明套餐名已使用
+                    return new Result(false,"更新套餐失败","该套餐名已使用");
+                }else {
+//                    表明该套餐名未使用
+                    Setmeal updateSetmeal = setmealService.updateSetmeal(setmeal, checkgroupIds);
+                    return new Result(true,"更新套餐成功",updateSetmeal);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false,"更新套餐失败",e.getMessage());
+        }
+    }
+
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('SETMEAL_QUERY')")
+    @GetMapping("/findbyid/{id}")
+    public Result findById(@PathVariable("id") Integer id){
+        try{
+            Setmeal setmeal = setmealService.findById(id);
+            if(setmeal == null){
+                return new Result(false,"查询失败");
+            }else {
+                return new Result(true,"查询成功",setmeal);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false,"查询失败");
+        }
+    }
+
+    /**
+     * 根据id删除对应套餐
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('SETMEAL_DELETE')")
+    @DeleteMapping("/delete/{id}")
+    public Result deleteById(@PathVariable("id") Integer id){
+        try{
+            setmealService.deleteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false,"删除失败");
+        }
+        return new Result(true,"删除成功");
+    }
 }

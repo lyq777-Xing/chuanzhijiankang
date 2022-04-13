@@ -104,7 +104,7 @@ public class IMemberService extends ServiceImpl<MemberMapper, Member> implements
         int thisWeekNewMember = members1.size();
 //        本月新增会员数
         QueryWrapper<Member> wrapper2 = new QueryWrapper<>();
-        wrapper2.lt("regTime",today).ge("regTime",thisWeekMonday);
+        wrapper2.lt("regTime",today).ge("regTime",firstDayThisMonth);
         List<Member> members2 = memberMapper.selectList(wrapper2);
         int thisMonthNewMember = members2.size();
 //        获取今日预约数

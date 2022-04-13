@@ -47,6 +47,7 @@ public class SecuityConfig extends WebSecurityConfigurerAdapter {
             "/logout",
             "/favicon.ico",
             "/menu",
+            "/ordersetting/upload"
 //            "/login",
     };
 
@@ -65,6 +66,8 @@ public class SecuityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(URL_WHITELIST).permitAll()
+                .antMatchers("/setmeal/upload").permitAll()
+                .antMatchers("/ordersetting/upload").permitAll()
                 .anyRequest().authenticated()
 //        配置异常处理器
                 .and()

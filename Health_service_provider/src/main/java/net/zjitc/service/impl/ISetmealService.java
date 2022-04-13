@@ -138,8 +138,10 @@ public class ISetmealService extends ServiceImpl<SetmealMapper, Setmeal> impleme
 
         }else {
             ArrayList<CheckGroup> checkGroups = new ArrayList<>();
+            ArrayList<Integer> list = new ArrayList<>();
             for (SetmealAndCheckgroup sc:setmealAndCheckgroups) {
                 Integer checkgroup_id = sc.getCheckgroup_id();
+                list.add(checkgroup_id);
                 CheckGroup checkGroup = checkGroupMapper.selectById(checkgroup_id);
 //            通过groupid获取itemid
                 QueryWrapper<CheckGoupAndItem> wrapper1 = new QueryWrapper<>();
@@ -158,6 +160,7 @@ public class ISetmealService extends ServiceImpl<SetmealMapper, Setmeal> impleme
                 checkGroup.setCheckItems(checkItems);
                 checkGroups.add(checkGroup);
             }
+            setmeal.setCheckgroupids(list);
             setmeal.setCheckGroups(checkGroups);
         }
         return setmeal;
@@ -170,6 +173,45 @@ public class ISetmealService extends ServiceImpl<SetmealMapper, Setmeal> impleme
     @Override
     public List<Map<String, Object>> findSetmealCount() {
         return orderMapper.findSetmealCount();
+    }
+
+    /**
+     * 根据套餐信息以及对应检查组关联表
+     * @param setmeal
+     * @param checkgroupIds
+     * @return
+     */
+    @Override
+    public Setmeal updateSetmeal(Setmeal setmeal, Integer[] checkgroupIds) {
+        setmealMapper.updateById(setmeal);
+        QueryWrapper<SetmealAndCheckgroup> wrapper = new QueryWrapper<>();
+        wrapper.eq("setmeal_id",setmeal.getId());
+        ArrayList<CheckGroup> list = new ArrayList<>();
+        setmealAndCheckgroupMapper.delete(wrapper);
+        for (int i = 0; i < checkgroupIds.length; i++) {
+            CheckGroup checkGroup = checkGroupMapper.selectById(checkgroupIds[i]);
+            if (checkGroup != null) {
+                SetmealAndCheckgroup setmealAndCheckgroup = new SetmealAndCheckgroup();
+                setmealAndCheckgroup.setSetmealId(setmeal.getId());
+                setmealAndCheckgroup.setCheckgroupId(checkgroupIds[i]);
+                setmealAndCheckgroupMapper.insert(setmealAndCheckgroup);
+                list.add(checkGroup);
+            }
+        }
+        setmeal.setCheckGroups(list);
+        return setmeal;
+    }
+
+    /**
+     * 根据id删除套餐以及其相关信息
+     * @param id
+     */
+    @Override
+    public void deleteById(Integer id) {
+        QueryWrapper<SetmealAndCheckgroup> wrapper = new QueryWrapper<>();
+        wrapper.eq("setmeal_id",id);
+        setmealAndCheckgroupMapper.delete(wrapper);
+        setmealMapper.deleteById(id);
     }
 
 

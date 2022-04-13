@@ -16,4 +16,6 @@ public interface OrderSettingService extends IService<OrderSetting> {
     public void editNumberByDate(OrderSetting orderSetting);
 
     public OrderSetting findByDate(Date date);
+
+    public List<OrderSetting> findAll();
 }

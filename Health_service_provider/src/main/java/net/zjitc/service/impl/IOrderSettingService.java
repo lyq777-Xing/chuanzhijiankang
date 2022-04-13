@@ -24,19 +24,23 @@ public class IOrderSettingService extends ServiceImpl<OrderSettingMapper, OrderS
      */
     @Override
     public void add(List<OrderSetting> list) {
-        if(list != null && list.size() > 0){
+//        if(list != null && list.size() > 0){
             for (OrderSetting orderSetting :list) {
 //                检查此数据（日期）是否存在
                 QueryWrapper<OrderSetting> wrapper = new QueryWrapper<>();
                 wrapper.eq("orderDate",orderSetting.getOrderDate());
                 OrderSetting orderSettings = orderSettingMapper.selectOne(wrapper);
                 if(orderSettings!=null){
-                    orderSettingMapper.updateById(orderSetting);
+//                    QueryWrapper<OrderSetting> wrapper1 = new QueryWrapper<>();
+//                    wrapper.eq("orderDate",orderSetting.getOrderDate());
+//                    orderSettingMapper.update(orderSetting,wrapper);
+                    orderSettings.setNumber(orderSetting.getNumber());
+                    orderSettingMapper.updateById(orderSettings);
                 }else {
                     orderSettingMapper.insert(orderSetting);
                 }
             }
-        }
+        //}
     }
 
     /**
@@ -97,5 +101,15 @@ public class IOrderSettingService extends ServiceImpl<OrderSettingMapper, OrderS
         wrapper.eq("orderDate",date);
         OrderSetting orderSetting = orderSettingMapper.selectOne(wrapper);
         return orderSetting;
+    }
+
+    /**
+     * 查询所有
+     * @return
+     */
+    @Override
+    public List<OrderSetting> findAll() {
+        List<OrderSetting> orderSettings = orderSettingMapper.selectList(null);
+        return orderSettings;
     }
 }
